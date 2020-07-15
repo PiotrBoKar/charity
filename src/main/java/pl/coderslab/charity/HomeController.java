@@ -32,6 +32,11 @@ public class HomeController {
         return "index";
     }
 
+    @RequestMapping("/confirmation")
+    public String confirmation(){
+        return "confirmation";
+    }
+
 
 
 

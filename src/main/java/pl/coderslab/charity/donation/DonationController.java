@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.coderslab.charity.category.Category;
 import pl.coderslab.charity.category.CategoryDao;
 import pl.coderslab.charity.category.CategoryRepository;
+import pl.coderslab.charity.institution.InstitutionRepository;
 
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class DonationController {
     DonationRepository donationRepository;
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    InstitutionRepository institutionRepository;
     private final DonationDao donationDao;
 //    private final CategoryDao categoryDao;
     public DonationController(DonationDao donationDao){
@@ -31,16 +34,17 @@ public class DonationController {
     public String getForm(Model model) {
         model.addAttribute("donationAdd", new Donation());
         model.addAttribute("category", categoryRepository.findAll());
+        model.addAttribute("institution", institutionRepository.findAll());
         return "addDonation";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String donationAdd(@ModelAttribute @Validated Donation donation, BindingResult bindingResult) {
+    public String donationAdd(@ModelAttribute Donation donation, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "addDonation";
         }
         donationRepository.save(donation);
-        return "redirect:add";
+        return "redirect:../confirmation";
     }
 
     @GetMapping("/delete/{id}")
@@ -66,5 +70,4 @@ public class DonationController {
     }
     @ModelAttribute("categoryList")
     public List<Category> findAllCategories() { return categoryRepository.findAll(); }
-//
 }
